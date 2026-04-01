@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test závislosti — Som Závislý?</title>
+  <meta name="description" content="Bezplatný test závislosti. Zisti za 2 minúty, či máš problém s telefónom, sociálnymi sieťami, gamblingom, alkoholom alebo inými závislosťami.">
+  <meta property="og:title" content="Test závislosti — Zisti za 2 minúty">
+  <meta property="og:description" content="15 otázok. Úprimné odpovede. Jasný výsledok. Bezplatne.">
+  <meta property="og:url" content="https://somzavisly.sk/test.html">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('GSz1zcc5bbWOtuU_Q');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      color: #fff;
+      background: #000;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .heading {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+    }
+
+    .grain-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 128px;
+    }
+
+    /* NAV */
+    .nav-mini {
+      position: fixed; top: 1rem; left: 50%; transform: translateX(-50%);
+      z-index: 50; padding: 0.5rem 1.25rem; border-radius: 9999px;
+      background: rgba(255,255,255,0.04); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .nav-mini a {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      color: #fff; text-decoration: none; font-size: 1.1rem;
+    }
+    .nav-mini span { color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+
+    /* CONTAINER */
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 100px 1.5rem 4rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* INTRO SCREEN */
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .intro-badge {
+      display: inline-block; font-size: 0.75rem; font-weight: 500;
+      border-radius: 9999px; padding: 0.3rem 0.9rem;
+      background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.25);
+      color: #C084FC; margin-bottom: 1.5rem;
+    }
+    .intro h1 { font-size: clamp(2.5rem, 7vw, 4rem); margin-bottom: 1.2rem; }
+    .intro h1 .accent {
+      background: linear-gradient(135deg, #8B5CF6, #C084FC, #E879F9);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .intro p {
+      color: rgba(255,255,255,0.5); font-size: 1.05rem;
+      line-height: 1.7; margin-bottom: 2rem; max-width: 480px;
+    }
+    .intro-meta {
+      display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+    }
+    .intro-meta div { text-align: center; }
+    .intro-meta .num {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      font-size: 1.6rem; color: #C084FC;
+    }
+    .intro-meta .label {
+      font-size: 0.7rem; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .btn-start {
+      padding: 1rem 2.5rem; border-radius: 9999px; border: none;
+      background: linear-gradient(135deg, #8B5CF6, #C084FC);
+      color: #fff; font-family: 'Barlow', sans-serif; font-size: 1.05rem;
+      font-weight: 500; cursor: pointer; transition: all 0.3s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(139,92,246,0.3); }
+
+    /* PROGRESS BAR */
+    .progress-wrap {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 3px; background: rgba(255,255,255,0.06);
+    }
+    .progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #8B5CF6, #C084FC, #E879F9);
+      transition: width 0.4s cubic-bezier(0.22,1,0.36,1);
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* QUESTION */
+    .question-screen { text-align: center; }
+    .q-counter {
+      font-size: 0.8rem; color: rgba(255,255,255,0.3); font-weight: 500;
+      letter-spacing: 1px; margin-bottom: 1.5rem;
+    }
+    .q-category {
+      display: inline-block; font-size: 0.7rem; font-weight: 500;
+      border-radius: 9999px; padding: 0.2rem 0.7rem; margin-bottom: 1.5rem;
+      background: rgba(139,92,246,0.12); color: #C084FC;
+    }
+    .q-text {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 400; line-height: 1.4;
+      margin-bottom: 2.5rem; max-width: 520px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    .answers {
+      display: flex; flex-direction: column; gap: 10px;
+      max-width: 440px; margin: 0 auto;
+    }
+    .answer-btn {
+      padding: 1rem 1.5rem; border-radius: 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #fff; font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem; font-weight: 400;
+      cursor: pointer; transition: all 0.25s;
+      text-align: left; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .answer-btn:hover {
+      background: rgba(139,92,246,0.1);
+      border-color: rgba(139,92,246,0.3);
+      transform: translateY(-2px);
+    }
+    .answer-btn .key {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.4);
+      flex-shrink: 0;
+    }
+    .answer-btn.selected {
+      background: rgba(139,92,246,0.15);
+      border-color: rgba(139,92,246,0.4);
+    }
+    .answer-btn.selected .key {
+      background: rgba(139,92,246,0.3); color: #C084FC;
+      border-color: rgba(139,92,246,0.5);
+    }
+
+    /* RESULTS */
+    .results-screen { text-align: center; }
+
+    .result-score-ring {
+      width: 180px; height: 180px; margin: 0 auto 2rem;
+      position: relative;
+    }
+    .result-score-ring svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
+    .ring-fill {
+      fill: none; stroke-width: 8; stroke-linecap: round;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .ring-label {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%); text-align: center;
+    }
+    .ring-num {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      font-size: 3rem; line-height: 1;
+    }
+    .ring-sub { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    .result-level {
+      display: inline-block; padding: 0.3rem 1rem; border-radius: 9999px;
+      font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem;
+    }
+    .level-low { background: rgba(34,197,94,0.15); color: #4ADE80; border: 1px solid rgba(34,197,94,0.3); }
+    .level-mid { background: rgba(251,191,36,0.15); color: #FBBF24; border: 1px solid rgba(251,191,36,0.3); }
+    .level-high { background: rgba(239,68,68,0.15); color: #F87171; border: 1px solid rgba(239,68,68,0.3); }
+
+    .result-title { font-size: clamp(1.8rem, 5vw, 2.8rem); margin-bottom: 1rem; }
+    .result-desc {
+      color: rgba(255,255,255,0.45); font-size: 1rem;
+      line-height: 1.7; max-width: 460px; margin: 0 auto 2.5rem;
+    }
+
+    /* CATEGORY BREAKDOWN */
+    .breakdown {
+      max-width: 440px; margin: 0 auto 3rem;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .breakdown-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0.75rem 1rem; border-radius: 0.75rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .breakdown-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+    .breakdown-info { flex: 1; text-align: left; }
+    .breakdown-name { font-size: 0.85rem; font-weight: 500; }
+    .breakdown-bar-wrap {
+      height: 4px; background: rgba(255,255,255,0.06);
+      border-radius: 2px; margin-top: 4px; overflow: hidden;
+    }
+    .breakdown-bar {
+      height: 100%; border-radius: 2px;
+      transition: width 1s cubic-bezier(0.22,1,0.36,1) 0.5s;
+      width: 0%;
+    }
+    .bar-low { background: #4ADE80; }
+    .bar-mid { background: #FBBF24; }
+    .bar-high { background: #F87171; }
+    .breakdown-pct {
+      font-size: 0.85rem; font-weight: 600; min-width: 36px; text-align: right;
+    }
+
+    /* CTA / EMAIL */
+    .result-cta {
+      max-width: 440px; margin: 0 auto;
+      padding: 2rem; border-radius: 1.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 2rem;
+    }
+    .result-cta h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .result-cta p {
+      font-size: 0.85rem; color: rgba(255,255,255,0.4);
+      margin-bottom: 1.25rem; line-height: 1.5;
+    }
+    .result-email-form {
+      display: flex; gap: 8px;
+    }
+    .result-email-form input {
+      flex: 1; padding: 0.75rem 1rem; border-radius: 9999px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+      outline: none;
+    }
+    .result-email-form input::placeholder { color: rgba(255,255,255,0.25); }
+    .result-email-form input:focus { border-color: rgba(139,92,246,0.4); }
+    .result-email-form button {
+      padding: 0.75rem 1.5rem; border-radius: 9999px; border: none;
+      background: linear-gradient(135deg, #8B5CF6, #C084FC);
+      color: #fff; font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+      font-weight: 500; cursor: pointer; white-space: nowrap;
+    }
+    .result-email-form button:disabled { opacity: 0.5; }
+    .email-success {
+      display: none; color: #C084FC; font-size: 0.9rem;
+      font-weight: 500; padding: 0.75rem;
+    }
+    .email-error {
+      display: none; color: #F87171; font-size: 0.8rem; margin-top: 0.5rem;
+    }
+
+    .share-row {
+      display: flex; gap: 10px; justify-content: center; margin-bottom: 2rem;
+    }
+    .share-btn {
+      padding: 0.65rem 1.25rem; border-radius: 9999px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6); font-family: 'Barlow', sans-serif;
+      font-size: 0.8rem; font-weight: 500; cursor: pointer;
+      text-decoration: none; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .share-btn:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+
+    .retry-btn {
+      padding: 0.75rem 2rem; border-radius: 9999px;
+      background: transparent; border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.5); font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+    }
+    .retry-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    /* FOOTER */
+    .test-footer {
+      text-align: center; padding: 3rem 1.5rem 2rem;
+      font-size: 0.75rem; color: rgba(255,255,255,0.25);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      max-width: 640px; margin: 0 auto;
+    }
+    .test-footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
+    .test-footer a:hover { color: rgba(255,255,255,0.6); }
+
+    @media (max-width: 500px) {
+      .result-email-form { flex-direction: column; }
+      .intro-meta { gap: 1.5rem; }
+      .share-row { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grain-overlay"></div>
+<div class="progress-wrap" id="progressWrap" style="display:none;">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<nav class="nav-mini">
+  <a href="/">závislý</a>
+  <span>test</span>
+</nav>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="screen active" id="introScreen">
+    <div class="intro">
+      <div class="intro-badge">Bezplatný test</div>
+      <h1 class="heading">Na čom si<br><span class="accent">závislý?</span></h1>
+      <p>15 úprimných otázok. Žiadne súdenie. Na konci dostaneš jasný výsledok a konkrétne kroky čo s tým.</p>
+      <div class="intro-meta">
+        <div><div class="num">15</div><div class="label">Otázok</div></div>
+        <div><div class="num">2m</div><div class="label">Trvanie</div></div>
+        <div><div class="num">6</div><div class="label">Oblastí</div></div>
+      </div>
+      <button class="btn-start" onclick="startTest()">
+        Začať test
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- QUESTION -->
+  <div class="screen" id="questionScreen">
+    <div class="question-screen">
+      <div class="q-counter" id="qCounter"></div>
+      <div class="q-category" id="qCategory"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="answers" id="answers"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="resultScreen">
+    <div class="results-screen">
+      <div class="result-score-ring">
+        <svg width="180" height="180" viewBox="0 0 180 180">
+          <circle class="ring-bg" cx="90" cy="90" r="78"/>
+          <circle class="ring-fill" id="ringFill" cx="90" cy="90" r="78"
+            stroke-dasharray="490" stroke-dashoffset="490"/>
+        </svg>
+        <div class="ring-label">
+          <div class="ring-num" id="ringNum">0</div>
+          <div class="ring-sub">z 60</div>
+        </div>
+      </div>
+
+      <div class="result-level" id="resultLevel"></div>
+      <h2 class="heading result-title" id="resultTitle"></h2>
+      <p class="result-desc" id="resultDesc"></p>
+
+      <div class="breakdown" id="breakdown"></div>
+
+      <div class="result-cta" id="emailCta">
+        <h3>Chceš vedieť viac?</h3>
+        <p>Pošleme ti personalizované tipy na základe tvojho výsledku + prístup k 30-dňovému detox plánu.</p>
+        <form class="result-email-form" id="resultEmailForm" onsubmit="submitResultEmail(event)">
+          <input type="email" id="resultEmailInput" name="email" placeholder="tvoj@email.sk" required>
+          <button type="submit" id="resultSubmitBtn">Odoslať</button>
+        </form>
+        <div class="email-error" id="emailError">Niečo sa pokazilo. Skús znova.</div>
+      </div>
+      <div class="email-success" id="emailSuccess">Ďakujeme! Pošleme ti tipy na tvoj email.</div>
+
+      <div class="share-row">
+        <a class="share-btn" id="shareX" href="#" target="_blank">Zdieľať na X</a>
+        <button class="share-btn" onclick="copyLink()">Kopírovať link</button>
+        <a class="share-btn" id="shareFB" href="#" target="_blank">Facebook</a>
+      </div>
+
+      <button class="retry-btn" onclick="location.reload()">Zopakovať test</button>
+    </div>
+  </div>
+</div>
+
+<div class="test-footer">
+  <p>Tento test nie je klinická diagnóza. Ak máš vážny problém, vyhľadaj odbornú pomoc.</p>
+  <p style="margin-top: 0.5rem;">&copy; 2026 <a href="/">somzavisly.sk</a></p>
+</div>
+
+<script>
+var questions = [
+  // MOBIL / SCREEN TIME (cat: mobil)
+  { cat: 'mobil', icon: '📱', label: 'Telefón',
+    q: 'Siahneš po telefóne do 5 minút od zobudenia?',
+    a: ['Nikdy', 'Občas', 'Väčšinou áno', 'Vždy, je to prvá vec'] },
+  { cat: 'mobil', icon: '📱', label: 'Telefón',
+    q: 'Cítiš nepokoj alebo úzkosť keď nemáš telefón pri sebe?',
+    a: ['Vôbec nie', 'Trochu áno', 'Dosť áno', 'Bez telefónu nevydržím'] },
+
+  // SOCIÁLNE SIETE (cat: social)
+  { cat: 'social', icon: '📲', label: 'Sociálne siete',
+    q: 'Koľko hodín denne trávíš na sociálnych sieťach?',
+    a: ['Menej ako hodinu', '1-2 hodiny', '2-4 hodiny', 'Viac ako 4 hodiny'] },
+  { cat: 'social', icon: '📲', label: 'Sociálne siete',
+    q: 'Otvoríš Instagram alebo TikTok „na chvíľu" a zrazu je o hodinu neskôr?',
+    a: ['To sa mi nestáva', 'Raz za čas', 'Často', 'Prakticky zakaždým'] },
+  { cat: 'social', icon: '📲', label: 'Sociálne siete',
+    q: 'Scrolluješ v posteli pred spaním dlhšie než 30 minút?',
+    a: ['Nie, telefón v posteli nemám', 'Občas', 'Väčšinou áno', 'Každý večer hodinu+'] },
+
+  // GAMBLING (cat: gambling)
+  { cat: 'gambling', icon: '🎰', label: 'Gambling',
+    q: 'Stavíš peniaze online — stávky, kasíno, automaty, poker?',
+    a: ['Nikdy', 'Skúsil/a som raz-dva', 'Hrám pravidelne', 'Hrám denne alebo takmer denne'] },
+  { cat: 'gambling', icon: '🎰', label: 'Gambling',
+    q: 'Stalo sa ti že si prehral/a viac peňazí než si plánoval/a?',
+    a: ['Nikdy', 'Raz sa to stalo', 'Stáva sa to', 'Pravidelne prehrávam viac než chcem'] },
+
+  // ALKOHOL (cat: alkohol)
+  { cat: 'alkohol', icon: '🍺', label: 'Alkohol',
+    q: 'Koľkokrát za mesiac piješ alkohol?',
+    a: ['Vôbec alebo výnimočne', '1-4x za mesiac', '2-3x týždenne', 'Takmer denne'] },
+  { cat: 'alkohol', icon: '🍺', label: 'Alkohol',
+    q: 'Piješ niekedy sám/sama, nie v spoločnosti?',
+    a: ['Nikdy', 'Výnimočne', 'Občas áno', 'Pravidelne'] },
+  { cat: 'alkohol', icon: '🍺', label: 'Alkohol',
+    q: 'Stáva sa ti že vypiješ viac než si plánoval/a?',
+    a: ['Nie', 'Zriedka', 'Dosť často', 'Takmer zakaždým'] },
+
+  // GAMING (cat: gaming)
+  { cat: 'gaming', icon: '🎮', label: 'Gaming',
+    q: 'Hráš hry (PC, mobil, konzola) viac ako 3 hodiny denne?',
+    a: ['Nehrám alebo menej', '3-4 hodiny', '4-6 hodín', '6+ hodín'] },
+  { cat: 'gaming', icon: '🎮', label: 'Gaming',
+    q: 'Zanedbávaš kvôli hraniu povinnosti, spánok alebo vzťahy?',
+    a: ['Nie', 'Mierne', 'Dosť často', 'Výrazne áno'] },
+
+  // PORNO (cat: porno)
+  { cat: 'porno', icon: '🔞', label: 'Pornografia',
+    q: 'Pozeráš pornografiu a cítiš že to nezvládaš kontrolovať?',
+    a: ['Nepozerám / nemám problém', 'Občas mám pocit že je to veľa', 'Často sa k tomu vraciam aj keď nechcem', 'Nedokážem prestať'] },
+
+  // VAPING (cat: vaping)
+  { cat: 'vaping', icon: '💨', label: 'Vaping / Fajčenie',
+    q: 'Fajčíš alebo vapeuješ?',
+    a: ['Nie', 'Príležitostne', 'Denne', 'Nedokážem bez toho fungovať'] },
+
+  // CELKOVÝ (cat: general)
+  { cat: 'general', icon: '🧠', label: 'Celkovo',
+    q: 'Povedal ti niekto blízky že máš problém s niečím z vyššie uvedeného?',
+    a: ['Nie', 'Naznačili to', 'Áno, viackrát', 'Áno a spôsobilo to konflikty'] }
+];
+
+var categories = {
+  mobil:    { name: 'Telefón',         icon: '📱', score: 0, max: 0 },
+  social:   { name: 'Sociálne siete',  icon: '📲', score: 0, max: 0 },
+  gambling: { name: 'Gambling',        icon: '🎰', score: 0, max: 0 },
+  alkohol:  { name: 'Alkohol',         icon: '🍺', score: 0, max: 0 },
+  gaming:   { name: 'Gaming',          icon: '🎮', score: 0, max: 0 },
+  porno:    { name: 'Pornografia',     icon: '🔞', score: 0, max: 0 },
+  vaping:   { name: 'Vaping / Fajčenie', icon: '💨', score: 0, max: 0 },
+  general:  { name: 'Celkovo',         icon: '🧠', score: 0, max: 0 }
+};
+
+// Count max per category
+questions.forEach(function(q) {
+  categories[q.cat].max += 3;
+});
+
+var currentQ = 0;
+var totalScore = 0;
+var maxScore = questions.length * 3;
+
+function startTest() {
+  document.getElementById('introScreen').classList.remove('active');
+  document.getElementById('questionScreen').classList.add('active');
+  document.getElementById('progressWrap').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  var q = questions[currentQ];
+  document.getElementById('qCounter').textContent = (currentQ + 1) + ' / ' + questions.length;
+  document.getElementById('qCategory').textContent = q.icon + ' ' + q.label;
+  document.getElementById('qText').textContent = q.q;
+
+  var answersEl = document.getElementById('answers');
+  answersEl.innerHTML = '';
+
+  var keys = ['A', 'B', 'C', 'D'];
+  q.a.forEach(function(text, i) {
+    var btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerHTML = '<span class="key">' + keys[i] + '</span>' + text;
+    btn.onclick = function() { selectAnswer(i); };
+    answersEl.appendChild(btn);
+  });
+
+  // Update progress
+  var pct = (currentQ / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  // Re-trigger animation
+  var screen = document.getElementById('questionScreen');
+  screen.classList.remove('active');
+  void screen.offsetWidth;
+  screen.classList.add('active');
+}
+
+function selectAnswer(value) {
+  var q = questions[currentQ];
+  categories[q.cat].score += value;
+  totalScore += value;
+
+  // Highlight selected
+  var btns = document.querySelectorAll('.answer-btn');
+  btns.forEach(function(b, i) {
+    if (i === value) b.classList.add('selected');
+    b.style.pointerEvents = 'none';
+  });
+
+  setTimeout(function() {
+    currentQ++;
+    if (currentQ < questions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
+  }, 400);
+}
+
+function showResults() {
+  document.getElementById('questionScreen').classList.remove('active');
+  document.getElementById('resultScreen').classList.add('active');
+  document.getElementById('progressBar').style.width = '100%';
+
+  var pct = Math.round((totalScore / maxScore) * 100);
+
+  // Ring animation
+  var circumference = 490;
+  var offset = circumference - (pct / 100) * circumference;
+  var ring = document.getElementById('ringFill');
+
+  var color;
+  if (pct <= 25) { color = '#4ADE80'; }
+  else if (pct <= 55) { color = '#FBBF24'; }
+  else { color = '#F87171'; }
+
+  ring.style.stroke = color;
+  setTimeout(function() { ring.style.strokeDashoffset = offset; }, 100);
+
+  // Animate number
+  animateNum('ringNum', 0, totalScore, 1200);
+
+  // Level badge + text
+  var levelEl = document.getElementById('resultLevel');
+  var titleEl = document.getElementById('resultTitle');
+  var descEl = document.getElementById('resultDesc');
+
+  if (pct <= 25) {
+    levelEl.className = 'result-level level-low';
+    levelEl.textContent = 'Nízke riziko';
+    titleEl.textContent = 'Vyzerá to dobre.';
+    descEl.textContent = 'Nemáš výrazné znaky závislosti. Udržiavaj zdravé návyky a občas si skontroluj screen time. Prevencia je najlepšia liečba.';
+  } else if (pct <= 55) {
+    levelEl.className = 'result-level level-mid';
+    levelEl.textContent = 'Stredné riziko';
+    titleEl.textContent = 'Niečo si zaslúži pozornosť.';
+    descEl.textContent = 'V niektorých oblastiach sa objavujú znaky, ktoré stoja za zamyslenie. Nie je to katastrofa, ale je čas niečo zmeniť kým to nie je neskoro.';
+  } else {
+    levelEl.className = 'result-level level-high';
+    levelEl.textContent = 'Vysoké riziko';
+    titleEl.textContent = 'Toto je signál.';
+    descEl.textContent = 'Tvoje odpovede naznačujú výrazné znaky závislosti v jednej alebo viacerých oblastiach. Nie si v tom sám — ale je dôležité začať niečo robiť. Teraz.';
+  }
+
+  // Category breakdown
+  var breakdownEl = document.getElementById('breakdown');
+  breakdownEl.innerHTML = '';
+
+  // Sort categories by score descending, skip general and zero-max
+  var sorted = Object.keys(categories)
+    .filter(function(k) { return k !== 'general' && categories[k].max > 0; })
+    .sort(function(a, b) { return (categories[b].score / categories[b].max) - (categories[a].score / categories[a].max); });
+
+  sorted.forEach(function(key) {
+    var cat = categories[key];
+    var catPct = Math.round((cat.score / cat.max) * 100);
+    var barClass = catPct <= 25 ? 'bar-low' : catPct <= 55 ? 'bar-mid' : 'bar-high';
+    var pctColor = catPct <= 25 ? '#4ADE80' : catPct <= 55 ? '#FBBF24' : '#F87171';
+
+    var item = document.createElement('div');
+    item.className = 'breakdown-item';
+    item.innerHTML =
+      '<div class="breakdown-icon">' + cat.icon + '</div>' +
+      '<div class="breakdown-info">' +
+        '<div class="breakdown-name">' + cat.name + '</div>' +
+        '<div class="breakdown-bar-wrap"><div class="breakdown-bar ' + barClass + '" id="bar-' + key + '"></div></div>' +
+      '</div>' +
+      '<div class="breakdown-pct" style="color:' + pctColor + '">' + catPct + '%</div>';
+    breakdownEl.appendChild(item);
+
+    setTimeout(function() {
+      document.getElementById('bar-' + key).style.width = catPct + '%';
+    }, 200);
+  });
+
+  // Share links
+  var shareText = 'Urobil/a som si test závislosti na somzavisly.sk — moje skóre: ' + totalScore + '/' + maxScore + '. Aké je tvoje?';
+  var shareUrl = 'https://somzavisly.sk/test.html';
+  document.getElementById('shareX').href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl);
+  document.getElementById('shareFB').href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl) + '&quote=' + encodeURIComponent(shareText);
+}
+
+function animateNum(id, start, end, duration) {
+  var el = document.getElementById(id);
+  var range = end - start;
+  var startTime = null;
+  function step(t) {
+    if (!startTime) startTime = t;
+    var progress = Math.min((t - startTime) / duration, 1);
+    var ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(start + range * ease);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function copyLink() {
+  navigator.clipboard.writeText('https://somzavisly.sk/test.html').then(function() {
+    alert('Link skopírovaný!');
+  });
+}
+
+// EMAIL — sends results to user via EmailJS + saves to Formspree
+function submitResultEmail(e) {
+  e.preventDefault();
+  var email = document.getElementById('resultEmailInput').value;
+  var btn = document.getElementById('resultSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Odosielam...';
+  document.getElementById('emailError').style.display = 'none';
+
+  var pct = Math.round((totalScore / maxScore) * 100);
+
+  // Build top areas text
+  var topCats = Object.keys(categories)
+    .filter(function(k) { return k !== 'general' && categories[k].max > 0 && categories[k].score > 0; })
+    .sort(function(a,b) { return categories[b].score - categories[a].score; })
+    .slice(0, 3)
+    .map(function(k) { return categories[k].icon + ' ' + categories[k].name + ' — ' + Math.round(categories[k].score / categories[k].max * 100) + '%'; })
+    .join('\n');
+
+  // Level data for email template
+  var levelText, levelBg, levelColor, levelBorder, title, description, tips;
+  if (pct <= 25) {
+    levelText = 'Nízke riziko';
+    levelBg = 'rgba(34,197,94,0.15)'; levelColor = '#4ADE80'; levelBorder = 'rgba(34,197,94,0.3)';
+    title = 'Vyzerá to dobre.';
+    description = 'Nemáš výrazné znaky závislosti. Udržiavaj zdravé návyky a občas si skontroluj screen time.';
+    tips = '• Nastav si denný screen time limit na telefóne\n• Skús 1 deň v týždni bez sociálnych sietí\n• Pokračuj v tom čo robíš — prevencia je najlepšia liečba';
+  } else if (pct <= 55) {
+    levelText = 'Stredné riziko';
+    levelBg = 'rgba(251,191,36,0.15)'; levelColor = '#FBBF24'; levelBorder = 'rgba(251,191,36,0.3)';
+    title = 'Niečo si zaslúži pozornosť.';
+    description = 'V niektorých oblastiach sa objavujú znaky, ktoré stoja za zamyslenie. Nie je to katastrofa, ale je čas niečo zmeniť.';
+    tips = '• Identifikuj svoju najhoršiu oblasť a zameraj sa na ňu\n• Žiadny telefón v spálni — začni dnes\n• Nastav si "no-scroll" časy (ráno prvú hodinu, večer po 22:00)\n• Povedz o tom niekomu blízkemu';
+  } else {
+    levelText = 'Vysoké riziko';
+    levelBg = 'rgba(239,68,68,0.15)'; levelColor = '#F87171'; levelBorder = 'rgba(239,68,68,0.3)';
+    title = 'Toto je signál.';
+    description = 'Tvoje odpovede naznačujú výrazné znaky závislosti. Nie si v tom sám — ale je dôležité začať niečo robiť. Teraz.';
+    tips = '• Zvaž rozhovor s odborníkom (Linka dôvery: 0800 500 333)\n• Odstráň aplikácie ktoré ťa najviac ťahajú\n• Povedz niekomu blízkemu čo prežívaš\n• Malé kroky: prvý deň skús vydržať 1 hodinu bez triggeru';
+  }
+
+  // Send email to user via EmailJS
+  emailjs.send('service_mzqpl4u', 'template_exmmsmp', {
+    user_email: email,
+    score: totalScore + ' / ' + maxScore,
+    level_text: levelText,
+    level_bg: levelBg,
+    level_color: levelColor,
+    level_border: levelBorder,
+    title: title,
+    description: description,
+    top_areas: topCats,
+    tips: tips,
+    message: ''
+  }).then(function() {
+    // Also save to Formspree for your dashboard
+    fetch('https://formspree.io/f/mwvwqeky', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        score: totalScore + '/' + maxScore,
+        level: levelText,
+        top_areas: topCats,
+        source: 'test'
+      })
+    });
+    document.getElementById('emailCta').style.display = 'none';
+    document.getElementById('emailSuccess').style.display = 'block';
+  }).catch(function() {
+    showEmailError();
+  });
+
+  function showEmailError() {
+    btn.disabled = false;
+    btn.textContent = 'Odoslať';
+    document.getElementById('emailError').style.display = 'block';
+  }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  var keys = { 'a': 0, 'b': 1, 'c': 2, 'd': 3, '1': 0, '2': 1, '3': 2, '4': 3 };
+  if (document.getElementById('questionScreen').classList.contains('active') && keys[e.key.toLowerCase()] !== undefined) {
+    var btns = document.querySelectorAll('.answer-btn');
+    var idx = keys[e.key.toLowerCase()];
+    if (idx < btns.length && btns[idx].style.pointerEvents !== 'none') {
+      btns[idx].click();
+    }
+  }
+  if (e.key === 'Enter' && document.getElementById('introScreen').classList.contains('active')) {
+    startTest();
+  }
+});
+</script>
+
+</body>
+</html>
