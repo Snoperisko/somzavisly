@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Som Závislý — Zisti to. Zmeň to.</title>
+  <meta name="description" content="Si závislý na mobile, sociálnych sieťach alebo scrollovaní? Bezplatný test a praktické rady ako získať kontrolu späť.">
+  <meta property="og:title" content="Som Závislý — Zisti to. Zmeň to.">
+  <meta property="og:description" content="Telefón, scrollovanie, sociálne siete, gambling. Ak cítiš že ti niečo berie čas — nie si v tom sám.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://somzavisly.sk">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0A0A0B;
+      --surface: #141416;
+      --border: #1E1E22;
+      --text: #F5F5F7;
+      --muted: #8E8E93;
+      --accent: #6C5CE7;
+      --accent-light: #A29BFE;
+      --glow: rgba(108, 92, 231, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent-light);
+      letter-spacing: 0.5px;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    h1 .highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent-light);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* EMAIL FORM */
+    .form-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 460px;
+      width: 100%;
+      position: relative;
+    }
+
+    .form-container::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 17px;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--accent), transparent, var(--accent-light));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .form-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-group input {
+      flex: 1;
+      padding: 14px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-group input::placeholder {
+      color: var(--muted);
+    }
+
+    .input-group input:focus {
+      border-color: var(--accent);
+    }
+
+    .input-group button {
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .input-group button:hover {
+      opacity: 0.9;
+    }
+
+    .input-group button:active {
+      transform: scale(0.98);
+    }
+
+    .input-group button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 1rem;
+      color: var(--accent-light);
+      font-weight: 500;
+    }
+
+    .error-msg {
+      display: none;
+      text-align: center;
+      padding: 0.5rem;
+      color: #E76F51;
+      font-size: 0.85rem;
+    }
+
+    /* FOR WHO */
+    .section {
+      padding: 5rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    .section h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* COMING SOON */
+    .coming {
+      text-align: center;
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .coming h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .coming-items {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+
+    .coming-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .coming-item span {
+      color: var(--accent-light);
+      font-weight: 600;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* MOBILE */
+    @media (max-width: 500px) {
+      .input-group {
+        flex-direction: column;
+      }
+      .stats {
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">Pripravujeme niečo, čo ti pomôže</div>
+
+    <h1>Si <span class="highlight">závislý?</span><br>Zisti to. Zmeň to.</h1>
+
+    <p class="subtitle">
+      Telefón, scrollovanie, sociálne siete, gambling, hry.
+      Ak cítiš, že ti niečo berie čas, energiu a pokoj —
+      nie si v tom sám. Pripravujeme nástroje a testy,
+      ktoré ti pomôžu získať kontrolu späť.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">4h 37m</div>
+        <div class="stat-label">Priemerný screen time / deň</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">96x</div>
+        <div class="stat-label">Zdvihnutie telefónu / deň</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">33%</div>
+        <div class="stat-label">Gen Z vymazalo sociálnu sieť</div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div id="formContent">
+        <div class="form-title">Chcem vedieť prvý.</div>
+        <div class="form-desc">Nechaj email a dostaneš prístup k bezplatnému testu závislosti + tipy na digital detox.</div>
+        <form id="emailForm" class="input-group" onsubmit="handleSubmit(event)">
+          <input type="email" id="emailInput" placeholder="tvoj@email.sk" required>
+          <button type="submit" id="submitBtn">Chcem prístup</button>
+        </form>
+        <div id="errorMsg" class="error-msg">Niečo sa pokazilo. Skús to znova.</div>
+        <div class="form-note">Žiadny spam. Len užitočné veci. Odhlásiš sa kedykoľvek.</div>
+      </div>
+      <div id="successMsg" class="success-msg">
+        Ďakujeme! Ozveme sa ti hneď ako spustíme.
+      </div>
+    </div>
+  </section>
+
+  <!-- PRE KOHO -->
+  <section class="section">
+    <div class="section-label">Pre koho to je</div>
+    <h2>Ak sa v tomto spoznávaš, toto je pre teba.</h2>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <h3>Scrolluješ bez konca</h3>
+        <p>Otvoríš Instagram "na sekundu" a zrazu je o hodinu neskôr. Každý deň to isté.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎰</div>
+        <h3>Stávky a gambling</h3>
+        <p>Začalo to nevínne. Teraz to už nemáš pod kontrolou a bojíš sa o tom hovoriť.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎮</div>
+        <h3>Gaming bez limitu</h3>
+        <p>Hráš do 3 v noci, zanedbáš školu alebo prácu. Vieš, že to nie je ok, ale neprestávaš.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">😴</div>
+        <h3>Doom scrolling pred spaním</h3>
+        <p>Každý večer si hovoríš "ešte 5 minút" a zaspíš až o 2 hodiny neskôr.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🔔</div>
+        <h3>Notifikácie ťa ovládajú</h3>
+        <p>Každé pípnutie ťa vytrhne. Bez telefónu sa cítiš nepokojne.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <h3>Chceš zmenu</h3>
+        <p>Vieš, že problém existuje. Hľadáš spôsob ako začať. Presne preto sme tu.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CO PRIPRAVUJEME -->
+  <section class="coming">
+    <h2>Čo pripravujeme</h2>
+    <p style="color: var(--muted); max-width: 500px; margin: 0 auto;">
+      Nástroje, ktoré ti pomôžu pochopiť a zmeniť svoje návyky.
+    </p>
+    <div class="coming-items">
+      <div class="coming-item"><span>01</span> Test závislosti</div>
+      <div class="coming-item"><span>02</span> 30-dňový detox plán</div>
+      <div class="coming-item"><span>03</span> Týždenný newsletter</div>
+      <div class="coming-item"><span>04</span> Porovnanie detox appiek</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2026 somzavisly.sk — Získaj kontrolu späť.
+  </footer>
+
+  <script>
+    // ==================================================
+    // EMAIL COLLECTION
+    // ==================================================
+    // MOŽNOSŤ 1: Google Sheets (zadarmo)
+    // Vytvor Google Form s jedným poľom "email"
+    // Skopíruj prefilled link a nahraď URL nižšie
+    //
+    // MOŽNOSŤ 2: Formspree.io (50 submits/mesiac zadarmo)
+    // Zaregistruj sa na formspree.io, vytvor form, nahraď URL
+    //
+    // MOŽNOSŤ 3: Mailchimp embedded form
+    // ==================================================
+
+    var FORM_URL = ''; // Sem vlož URL z Formspree alebo Google Form
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      var email = document.getElementById('emailInput').value;
+      var btn = document.getElementById('submitBtn');
+      var errorEl = document.getElementById('errorMsg');
+
+      btn.disabled = true;
+      btn.textContent = 'Odosielam...';
+      errorEl.style.display = 'none';
+
+      // Ak nemáš ešte FORM_URL, uloží sa lokálne
+      if (!FORM_URL) {
+        var emails = JSON.parse(localStorage.getItem('somzavisly_emails') || '[]');
+        emails.push({ email: email, date: new Date().toISOString() });
+        localStorage.setItem('somzavisly_emails', JSON.stringify(emails));
+        showSuccess();
+        return;
+      }
+
+      // Odoslanie na Formspree / Google Sheets
+      fetch(FORM_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(response) {
+        if (response.ok) {
+          showSuccess();
+        } else {
+          showError();
+        }
+      })
+      .catch(function() {
+        showError();
+      });
+    }
+
+    function showSuccess() {
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    }
+
+    function showError() {
+      var btn = document.getElementById('submitBtn');
+      var errorEl = document.getElementById('errorMsg');
+      btn.disabled = false;
+      btn.textContent = 'Chcem prístup';
+      errorEl.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
