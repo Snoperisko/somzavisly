@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test závislosti na sociálnych sieťach — somzavisly.sk</title>
+  <meta name="description" content="Si závislý na Instagrame, TikToku alebo sociálnych sieťach? 20 otázok, bezplatný test.">
+  <meta property="og:title" content="Test závislosti na sociálnych sieťach">
+  <meta property="og:description" content="Si závislý na Instagrame, TikToku alebo sociálnych sieťach? 20 otázok, bezplatný test.">
+  <meta property="og:url" content="https://somzavisly.sk/test-social.html">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('GSz1zcc5bbWOtuU_Q');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0A0A0B;--surface:#141416;--border:#1E1E22;--text:#F5F5F7;--muted:#8E8E93;--accent:#6C5CE7;--accent-light:#A29BFE;--glow:rgba(108,92,231,0.15)}
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden}
+    .container{max-width:640px;margin:0 auto;padding:80px 1.5rem 4rem;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+    .screen{display:none}.screen.active{display:block;animation:fadeIn .5s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    .nav-mini{position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:50;padding:.5rem 1.25rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;gap:1rem}
+    .nav-mini a{color:var(--text);text-decoration:none;font-size:1rem;font-weight:700}
+    .nav-mini span{color:var(--muted);font-size:.8rem}
+
+    .progress-wrap{position:fixed;top:0;left:0;right:0;z-index:60;height:3px;background:rgba(255,255,255,.06);display:none}
+    .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-light));transition:width .4s;border-radius:0 2px 2px 0}
+
+    .intro-badge{display:inline-block;font-size:.75rem;font-weight:500;border-radius:100px;padding:.3rem .9rem;background:rgba(108,92,231,.12);border:1px solid rgba(108,92,231,.25);color:var(--accent-light);margin-bottom:1.5rem}
+    .intro h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem;letter-spacing:-.02em}
+    .intro h1 .hl{background:linear-gradient(135deg,var(--accent),var(--accent-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .intro p{color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:2rem;max-width:480px}
+    .intro-meta{display:flex;gap:2rem;margin-bottom:2.5rem;flex-wrap:wrap}
+    .intro-meta .num{font-size:1.6rem;font-weight:800;color:var(--accent-light)}
+    .intro-meta .lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+    .btn-start{padding:1rem 2.5rem;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#fff;font-family:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,92,231,.3)}
+
+    .q-counter{font-size:.8rem;color:var(--muted);font-weight:500;letter-spacing:1px;margin-bottom:1.5rem;text-align:center}
+    .q-text{font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:500;line-height:1.4;margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto;text-align:center}
+    .answers{display:flex;flex-direction:column;gap:10px;max-width:440px;margin:0 auto}
+    .answer-btn{padding:1rem 1.5rem;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:.95rem;cursor:pointer;transition:all .25s;text-align:left;display:flex;align-items:center;gap:.75rem}
+    .answer-btn:hover{background:rgba(108,92,231,.1);border-color:rgba(108,92,231,.3);transform:translateY(-2px)}
+    .answer-btn .key{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:var(--muted);flex-shrink:0}
+    .answer-btn.selected{background:rgba(108,92,231,.15);border-color:rgba(108,92,231,.4)}
+    .answer-btn.selected .key{background:rgba(108,92,231,.3);color:var(--accent-light);border-color:rgba(108,92,231,.5)}
+
+    .result-score-ring{width:180px;height:180px;margin:0 auto 2rem;position:relative}
+    .result-score-ring svg{transform:rotate(-90deg)}.ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:8}
+    .ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s cubic-bezier(.22,1,.36,1)}
+    .ring-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+    .ring-num{font-size:3rem;font-weight:800;line-height:1}.ring-sub{font-size:.7rem;color:var(--muted);margin-top:2px}
+
+    .result-level{display:inline-block;padding:.3rem 1rem;border-radius:100px;font-size:.85rem;font-weight:600;margin-bottom:1rem}
+    .level-low{background:rgba(34,197,94,.15);color:#4ADE80;border:1px solid rgba(34,197,94,.3)}
+    .level-mid{background:rgba(251,191,36,.15);color:#FBBF24;border:1px solid rgba(251,191,36,.3)}
+    .level-high{background:rgba(239,68,68,.15);color:#F87171;border:1px solid rgba(239,68,68,.3)}
+
+    .result-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;margin-bottom:.75rem;text-align:center;letter-spacing:-.02em}
+    .result-desc{color:var(--muted);font-size:.95rem;line-height:1.7;max-width:480px;margin:0 auto 2rem;text-align:center}
+
+    .detail-section{max-width:480px;margin:0 auto 1.5rem;text-align:left}
+    .detail-section h3{font-size:.75rem;font-weight:600;color:var(--accent-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:.75rem}
+    .detail-item{display:flex;gap:8px;margin-bottom:.5rem;font-size:.88rem;color:rgba(255,255,255,.7);line-height:1.5}
+    .detail-item::before{content:"•";color:var(--accent-light);flex-shrink:0}
+    .tip-item{display:flex;gap:8px;margin-bottom:.5rem;font-size:.88rem;color:rgba(255,255,255,.7);line-height:1.5}
+    .tip-item::before{content:"→";color:var(--accent-light);flex-shrink:0}
+
+    .result-cta{max-width:440px;margin:1.5rem auto 0;padding:1.75rem;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-align:center}
+    .result-cta h3{font-size:1.05rem;font-weight:600;margin-bottom:.5rem}
+    .result-cta p{font-size:.85rem;color:var(--muted);margin-bottom:1rem;line-height:1.5}
+    .result-email-form{display:flex;gap:8px}
+    .result-email-form input{flex:1;padding:.75rem 1rem;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:.9rem;outline:none}
+    .result-email-form input::placeholder{color:var(--muted)}
+    .result-email-form input:focus{border-color:var(--accent)}
+    .result-email-form button{padding:.75rem 1.5rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#fff;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;white-space:nowrap}
+    .result-email-form button:disabled{opacity:.5}
+    .email-success{display:none;color:var(--accent-light);font-size:.9rem;font-weight:500;padding:.75rem;text-align:center}
+    .email-error{display:none;color:#F87171;font-size:.8rem;margin-top:.5rem;text-align:center}
+
+    .share-row{display:flex;gap:10px;justify-content:center;margin:1.5rem 0}
+    .share-btn{padding:.6rem 1.1rem;border-radius:100px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s}
+    .share-btn:hover{border-color:var(--accent);color:var(--text)}
+    .retry-btn{padding:.75rem 2rem;border-radius:100px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:.9rem;cursor:pointer;transition:all .2s;display:block;margin:0 auto}
+    .retry-btn:hover{border-color:var(--accent);color:var(--text)}
+
+    .test-footer{text-align:center;padding:3rem 1.5rem 2rem;font-size:.75rem;color:rgba(255,255,255,.25);border-top:1px solid var(--border);max-width:640px;margin:0 auto}
+    .test-footer a{color:rgba(255,255,255,.35);text-decoration:none}
+
+    @media(max-width:500px){.result-email-form{flex-direction:column}.intro-meta{gap:1.5rem}.share-row{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+<div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+<nav class="nav-mini"><a href="/">závislý</a><span>Sociálne siete</span></nav>
+
+<div class="container">
+  <div class="screen active" id="introScreen"><div class="intro">
+    <div class="intro-badge">📲 Bezplatný test</div>
+    <h1 class="hl"><span class="hl">Test závislosti</span> na sociálnych sieťach</h1>
+    <p>20 otázok o tvojom vzťahu s Instagramom, TikTokom, Facebookom a ďalšími sieťami. Bez súdenia.</p>
+    <div class="intro-meta">
+      <div><div class="num">20</div><div class="lbl">Otázok</div></div>
+      <div><div class="num">3m</div><div class="lbl">Trvanie</div></div>
+      <div><div class="num">3</div><div class="lbl">Úrovne</div></div>
+    </div>
+    <button class="btn-start" onclick="startTest()">Začať test →</button>
+  </div></div>
+
+  <div class="screen" id="questionScreen">
+    <div class="q-counter" id="qCounter"></div>
+    <div class="q-text" id="qText"></div>
+    <div class="answers" id="answers"></div>
+  </div>
+
+  <div class="screen" id="resultScreen" style="text-align:center">
+    <div class="result-score-ring">
+      <svg width="180" height="180" viewBox="0 0 180 180">
+        <circle class="ring-bg" cx="90" cy="90" r="78"/>
+        <circle class="ring-fill" id="ringFill" cx="90" cy="90" r="78" stroke-dasharray="490" stroke-dashoffset="490"/>
+      </svg>
+      <div class="ring-label"><div class="ring-num" id="ringNum">0</div><div class="ring-sub">z 60</div></div>
+    </div>
+    <div class="result-level" id="resultLevel"></div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-desc" id="resultDesc"></div>
+    <div id="detailSection" class="detail-section"></div>
+    <div id="tipsSection" class="detail-section"></div>
+
+    <div class="result-cta" id="emailCta">
+      <h3>Chceš podrobnú analýzu na email?</h3>
+      <p>Pošleme ti kompletný výsledok + personalizovaný plán na základe tvojich odpovedí.</p>
+      <form class="result-email-form" id="resultEmailForm" onsubmit="submitEmail(event)">
+        <input type="email" id="resultEmailInput" name="email" placeholder="tvoj@email.sk" required>
+        <button type="submit" id="resultSubmitBtn">Odoslať</button>
+      </form>
+      <div class="email-error" id="emailError">Niečo sa pokazilo. Skús znova.</div>
+    </div>
+    <div class="email-success" id="emailSuccess">Ďakujeme! Výsledky ti prídu na email.</div>
+
+    <div class="share-row">
+      <a class="share-btn" id="shareX" href="#" target="_blank">Zdieľať na X</a>
+      <button class="share-btn" onclick="navigator.clipboard.writeText('https://somzavisly.sk/test-social.html');alert('Link skopírovaný!')">Kopírovať link</button>
+      <a class="share-btn" id="shareFB" href="#" target="_blank">Facebook</a>
+    </div>
+    <button class="retry-btn" onclick="location.reload()">Zopakovať test</button>
+  </div>
+</div>
+
+<div class="test-footer">
+  <p>Tento test nie je klinická diagnóza. Ak máš vážny problém, kontaktuj Linku dôvery: 0800 500 333</p>
+  <p style="margin-top:.5rem">© 2026 <a href="/">somzavisly.sk</a></p>
+</div>
+
+<script>
+var questions = [{"q":"Koľko hodín denne tráviš na sociálnych sieťach?","a":["Pod hodinu","1–2 hodiny","2–4 hodiny","4+ hodín"]},{"q":"Otvoríš Instagram/TikTok „na chvíľu“ a zrazu je o hodinu neskôr?","a":["Nestáva sa","Raz za čas","Často","Prakticky zakaždým"]},{"q":"Je to prvá vec čo otvoríš ráno?","a":["Nie","Občas","Väčšinou","Vždy"]},{"q":"Kontroluješ lajky a komentáre na svojich postoch opakovane?","a":["Nepost ujem / nie","Občas","Dosť často","Každých pár minút"]},{"q":"Cítiš sa horšie po scrollovaní (porovnávanie sa, závisť, úzkosť)?","a":["Nie","Občas","Pomerne často","Pravidelné"]},{"q":"Scrolluješ sociálne siete počas práce / školy?","a":["Nie","Občas krátko","Dosť často","Takmer non-stop"]},{"q":"Máš pocit že zmeškáš ak nie si online (FOMO)?","a":["Nie","Trochu","Dosť výrazne","Veľmi silné"]},{"q":"Skúsil si niekedy detox od sociálnych sietí?","a":["Áno, úspešne","Skúsil ale nevydržal dlho","Viackrát zlyhal","Nechcem / neviem si to predstaviť"]},{"q":"Porovnávaš svoj život s tým čo vidíš na sieťach?","a":["Nie","Občas","Dosť často","Takmer vždy a cítim sa horšie"]},{"q":"Natáčaš alebo fotíš zážitky primárne pre sociálne siete?","a":["Nie, žijem pre seba","Občas","Dosť často","Bez postu to akoby nebolo"]},{"q":"Cítiš nutkanie skontrolovať siete keď počuješ notifikáciu?","a":["Nie, mám vypnuté","Občas","Väčšinou","Okamžite, nedokážem odolať"]},{"q":"Scrolluješ v posteli pred spaním?","a":["Nie","Občas krátko","Väčšinou 30+ min","Každý večer hodinu+"]},{"q":"Máš viacero účtov na rôznych platformách ktoré kontroluješ striedavo?","a":["1-2 a nemám problém","3-4","5+","Strácam prehľad koľko ich mám"]},{"q":"Ignoroval si niekedy človeka pri tebe kvôli scrollovaniu?","a":["Nie","Možno nevedome","Stáva sa","Už mi to vytkli"]},{"q":"Ovplyvňujú sociálne siete tvoju náladu?","a":["Nie","Mierne","Dosť výrazne","Velmi — viem byť naštvaný/smútny kvôli postu"]},{"q":"Keď sa nudíš, je scrollovanie prvá vec?","a":["Nie","Občas","Takmer vždy","Je to jediná vec čo robím keď sa nudím"]},{"q":"Dokážeš jesť v reštaurácii bez toho aby si pozrel telefón?","a":["Áno","Väčšinou","Skôr nie","Určite nie"]},{"q":"Závidíš ľuďom na sieťach ich život, telo, peniaze, vzťahy?","a":["Nie","Občas","Dosť často","Pravidelne a cítim sa zle"]},{"q":"Povedal ti niekto blízky že si príliš často na sieťach?","a":["Nie","Naznačili to","Povedali to","Spôsobilo to hádky"]},{"q":"Keby si musel vymazať všetky sociálne siete, ako by si sa cítil?","a":["V pohode","Trochu nepríjemne","Veľmi ťažko","Nedokážem si to predstaviť"]}];
+var results = {"low":{"title":"Sociálne siete ťa nekontrolujú.","desc":"Máš zdravý vzťah so sociálnymi sieťami. Používaš ich vedome, nie kompulzívne.","detail":["Tvoj čas na sieťach je pod priemerom.","Nedopaduú výrazne na tvoju náladu ani spánok.","Dokážeš odložiť telefón bez problémov.","Žiješ primárne offline."],"tips":["Pokračuj v tom čo robíš.","Občas si skontroluj screen time v nastaven iach.","Skús digitálny šabat — 1 deň v týždni bez sietí."]},"mid":{"title":"Siete začínajú rátať viac než by mali.","desc":"Nie si v kríze, ale scrollovanie sa stáva automatickým návykom. FOMO, porovnávanie, doom scrolling — niečo z toho už poznáš.","detail":["Tráviš na sieťach 2–4 hodiny denne — to je 30–60 dní za rok.","Scrollovanie ovplyvňuje tvoju náladu — porovnávanie, závisť.","FOMO ťa ťahá späť aj keď chceš prestať.","Spánok je pravdepodobne ovplyvnený večerným scrollovaním."],"tips":["Vymaž aplikáciu ktorá ťa žerie najviac. Necháš si web verziu.","Nastav si denný limit v Screen Time / Digital Wellbeing.","Žiadne siete prvú hodinu dňa a poslednú hodinu pred spaním.","Vypni všetky notifikácie okrem DM od reálnych ľudí.","Keď otvá raš aplikáciu — spýtaj sa: prečo ju otváram? Ak nemáš odpoveď, zavri."]},"high":{"title":"Sociálne siete ťa ovládajú.","desc":"Scrollovanie už nie je voľba. Je to kompulzia. Ovplyvňuje tvoj spánok, náladu, vzťahy a sebaobraz. Nie si v tom sám — ale je čas niečo zmeniť.","detail":["4+ hodín denne na sieťach — to je 60+ dní za rok. Na scrollovaní.","FOMO, porovnávanie a závisť sú súčasťou tvojho dňa.","Spánok je výrazne narušený doom scrollingom.","Blízki ľudia si všímajú a reagujú.","Sebaobraz je silné ovplyvnený tým čo vidíš online.","Bez sietí sa cítiš stratene — to je závislosť."],"tips":["Vymaž TikTok a Instagram z telefónu na 7 dní. Len 7. Uviď čo sa stane.","Kúp si budík — telefón nemá čo robiť v spálni.","Nahlaď scrollovanie inou aktivitou: kniha, prechádzka, hudba.","Povedz kamarátovi že skúšaš detox — zdieľaný cieľ pomáha.","Ak cítiš depresiu alebo úzkosť spojenú so sieťami: Linka dôvery 0800 500 333.","Prečítaj si: 33% Gen Z už vymazalo sociálnu sieť. Nie si prvý."]}};
+var currentQ = 0, totalScore = 0, maxScore = 60;
+
+function startTest(){
+  document.getElementById('introScreen').classList.remove('active');
+  document.getElementById('questionScreen').classList.add('active');
+  document.getElementById('progressWrap').style.display='block';
+  showQuestion();
+}
+function showQuestion(){
+  var q=questions[currentQ];
+  document.getElementById('qCounter').textContent=(currentQ+1)+' / '+questions.length;
+  document.getElementById('qText').textContent=q.q;
+  var el=document.getElementById('answers');el.innerHTML='';
+  var keys=['A','B','C','D'];
+  q.a.forEach(function(t,i){
+    var b=document.createElement('button');b.className='answer-btn';
+    b.innerHTML='<span class="key">'+keys[i]+'</span>'+t;
+    b.onclick=function(){selectAnswer(i)};el.appendChild(b);
+  });
+  document.getElementById('progressBar').style.width=(currentQ/questions.length*100)+'%';
+  var s=document.getElementById('questionScreen');s.classList.remove('active');void s.offsetWidth;s.classList.add('active');
+}
+function selectAnswer(v){
+  totalScore+=v;
+  var btns=document.querySelectorAll('.answer-btn');
+  btns.forEach(function(b,i){if(i===v)b.classList.add('selected');b.style.pointerEvents='none'});
+  setTimeout(function(){currentQ++;currentQ<questions.length?showQuestion():showResults()},350);
+}
+function showResults(){
+  document.getElementById('questionScreen').classList.remove('active');
+  document.getElementById('resultScreen').classList.add('active');
+  document.getElementById('progressBar').style.width='100%';
+  var pct=Math.round(totalScore/maxScore*100);
+  var offset=490-(pct/100)*490;
+  var ring=document.getElementById('ringFill');
+  var r=pct<=25?results.low:pct<=55?results.mid:results.high;
+  var color=pct<=25?'#4ADE80':pct<=55?'#FBBF24':'#F87171';
+  var lvlClass=pct<=25?'level-low':pct<=55?'level-mid':'level-high';
+  var lvlText=pct<=25?'Nízke riziko':pct<=55?'Stredné riziko':'Vysoké riziko';
+  ring.style.stroke=color;
+  setTimeout(function(){ring.style.strokeDashoffset=offset},100);
+  animateNum('ringNum',0,totalScore,1200);
+  document.getElementById('resultLevel').className='result-level '+lvlClass;
+  document.getElementById('resultLevel').textContent=lvlText;
+  document.getElementById('resultTitle').textContent=r.title;
+  document.getElementById('resultDesc').textContent=r.desc;
+  var dh='<h3>Čo to znamená</h3>'+r.detail.map(function(d){return'<div class="detail-item">'+d+'</div>'}).join('');
+  document.getElementById('detailSection').innerHTML=dh;
+  var th='<h3>Čo môžeš spraviť</h3>'+r.tips.map(function(t){return'<div class="tip-item">'+t+'</div>'}).join('');
+  document.getElementById('tipsSection').innerHTML=th;
+  var shareText='Moje skóre: '+totalScore+'/60 na teste "Test závislosti na sociálnych sieťach" — somzavisly.sk';
+  var shareUrl='https://somzavisly.sk/test-social.html';
+  document.getElementById('shareX').href='https://x.com/intent/tweet?text='+encodeURIComponent(shareText)+'&url='+encodeURIComponent(shareUrl);
+  document.getElementById('shareFB').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(shareUrl);
+}
+function animateNum(id,s,e,d){var el=document.getElementById(id);var r=e-s;var st=null;function step(t){if(!st)st=t;var p=Math.min((t-st)/d,1);el.textContent=Math.round(s+r*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+
+function submitEmail(e){
+  e.preventDefault();var email=document.getElementById('resultEmailInput').value;
+  var btn=document.getElementById('resultSubmitBtn');btn.disabled=true;btn.textContent='Odosielam...';
+  document.getElementById('emailError').style.display='none';
+  var pct=Math.round(totalScore/maxScore*100);
+  var r=pct<=25?results.low:pct<=55?results.mid:results.high;
+  var lvl=pct<=25?'Nízke riziko':pct<=55?'Stredné riziko':'Vysoké riziko';
+  var color=pct<=25?'#4ADE80':pct<=55?'#FBBF24':'#F87171';
+  var bg=pct<=25?'rgba(34,197,94,0.15)':pct<=55?'rgba(251,191,36,0.15)':'rgba(239,68,68,0.15)';
+  var brd=pct<=25?'rgba(34,197,94,0.3)':pct<=55?'rgba(251,191,36,0.3)':'rgba(239,68,68,0.3)';
+  emailjs.send('service_mzqpl4u','template_zeue5vk',{
+    user_email:email,score:totalScore+' / '+maxScore,level_text:lvl,level_bg:bg,level_color:color,level_border:brd,
+    title:r.title,description:r.desc,
+    top_areas:r.detail.join('\n'),
+    tips:r.tips.join('\n')
+  }).then(function(){
+    fetch('https://formspree.io/f/mwvwqeky',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email:email,score:totalScore+'/'+maxScore,level:lvl,test:'test-social',source:'test-social'})});
+    document.getElementById('emailCta').style.display='none';
+    document.getElementById('emailSuccess').style.display='block';
+  }).catch(function(){btn.disabled=false;btn.textContent='Odoslať';document.getElementById('emailError').style.display='block'});
+}
+
+document.addEventListener('keydown',function(e){
+  var keys={a:0,b:1,c:2,d:3,'1':0,'2':1,'3':2,'4':3};
+  if(document.getElementById('questionScreen').classList.contains('active')&&keys[e.key.toLowerCase()]!==undefined){
+    var btns=document.querySelectorAll('.answer-btn');var idx=keys[e.key.toLowerCase()];
+    if(idx<btns.length&&btns[idx].style.pointerEvents!=='none')btns[idx].click();}
+  if(e.key==='Enter'&&document.getElementById('introScreen').classList.contains('active'))startTest();
+});
+</script>
+</body>
+</html>
