@@ -120,6 +120,55 @@
       margin-top: 2px;
     }
 
+    /* HERO CTA BUTTONS */
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .btn-test {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-test:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(108, 92, 231, 0.3);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
     /* EMAIL FORM */
     .form-container {
       background: var(--surface);
@@ -175,13 +224,8 @@
       transition: border-color 0.2s;
     }
 
-    .input-group input::placeholder {
-      color: var(--muted);
-    }
-
-    .input-group input:focus {
-      border-color: var(--accent);
-    }
+    .input-group input::placeholder { color: var(--muted); }
+    .input-group input:focus { border-color: var(--accent); }
 
     .input-group button {
       padding: 14px 24px;
@@ -197,18 +241,9 @@
       white-space: nowrap;
     }
 
-    .input-group button:hover {
-      opacity: 0.9;
-    }
-
-    .input-group button:active {
-      transform: scale(0.98);
-    }
-
-    .input-group button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    .input-group button:hover { opacity: 0.9; }
+    .input-group button:active { transform: scale(0.98); }
+    .input-group button:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .form-note {
       font-size: 0.75rem;
@@ -233,7 +268,7 @@
       font-size: 0.85rem;
     }
 
-    /* FOR WHO */
+    /* SECTIONS */
     .section {
       padding: 5rem 2rem;
       max-width: 800px;
@@ -270,9 +305,7 @@
       transition: border-color 0.2s;
     }
 
-    .card:hover {
-      border-color: var(--accent);
-    }
+    .card:hover { border-color: var(--accent); }
 
     .card-icon {
       font-size: 1.8rem;
@@ -289,6 +322,136 @@
       font-size: 0.85rem;
       color: var(--muted);
       line-height: 1.5;
+    }
+
+    /* HOW IT WORKS */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .step {
+      display: flex;
+      gap: 1.25rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(108,92,231,0.15), rgba(162,155,254,0.08));
+      border: 1px solid rgba(108,92,231,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-light);
+      flex-shrink: 0;
+    }
+    .step-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .step-content p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* STORIES */
+    .stories {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .story {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      position: relative;
+    }
+    .story-quote {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    .story-quote::before {
+      content: '"';
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      opacity: 0.4;
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      line-height: 1;
+    }
+    .story-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .story-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .story-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .story-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* TEST CTA BANNER */
+    .test-cta {
+      text-align: center;
+      padding: 5rem 2rem;
+      position: relative;
+    }
+    .test-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .test-cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .test-cta h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .test-cta p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      line-height: 1.7;
     }
 
     /* COMING SOON */
@@ -334,15 +497,20 @@
       color: var(--muted);
       border-top: 1px solid var(--border);
     }
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      margin: 0 0.75rem;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--text); }
 
     /* MOBILE */
     @media (max-width: 500px) {
-      .input-group {
-        flex-direction: column;
-      }
-      .stats {
-        gap: 1.5rem;
-      }
+      .input-group { flex-direction: column; }
+      .stats { gap: 1.5rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .step { flex-direction: column; gap: 0.75rem; }
     }
   </style>
 </head>
@@ -350,15 +518,14 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="badge">Pripravujeme niečo, čo ti pomôže</div>
+    <div class="badge">Bezplatný test závislosti — 15 otázok, 2 minúty</div>
 
     <h1>Si <span class="highlight">závislý?</span><br>Zisti to. Zmeň to.</h1>
 
     <p class="subtitle">
       Telefón, scrollovanie, sociálne siete, gambling, hry.
       Ak cítiš, že ti niečo berie čas, energiu a pokoj —
-      nie si v tom sám. Pripravujeme nástroje a testy,
-      ktoré ti pomôžu získať kontrolu späť.
+      nie si v tom sám.
     </p>
 
     <div class="stats">
@@ -371,25 +538,17 @@
         <div class="stat-label">Zdvihnutie telefónu / deň</div>
       </div>
       <div class="stat">
-        <div class="stat-number">33%</div>
-        <div class="stat-label">Gen Z vymazalo sociálnu sieť</div>
+        <div class="stat-number">40%</div>
+        <div class="stat-label">Mladých má znaky závislosti</div>
       </div>
     </div>
 
-    <div class="form-container">
-      <div id="formContent">
-        <div class="form-title">Chcem vedieť prvý.</div>
-        <div class="form-desc">Nechaj email a dostaneš prístup k bezplatnému testu závislosti + tipy na digital detox.</div>
-        <form id="emailForm" class="input-group" onsubmit="handleSubmit(event)">
-          <input type="email" id="emailInput" placeholder="tvoj@email.sk" required>
-          <button type="submit" id="submitBtn">Chcem prístup</button>
-        </form>
-        <div id="errorMsg" class="error-msg">Niečo sa pokazilo. Skús to znova.</div>
-        <div class="form-note">Žiadny spam. Len užitočné veci. Odhlásiš sa kedykoľvek.</div>
-      </div>
-      <div id="successMsg" class="success-msg">
-        Ďakujeme! Ozveme sa ti hneď ako spustíme.
-      </div>
+    <div class="hero-buttons">
+      <a href="test.html" class="btn-test">
+        Spustiť test
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#ako-to-funguje" class="btn-secondary">Ako to funguje</a>
     </div>
   </section>
 
@@ -402,7 +561,7 @@
       <div class="card">
         <div class="card-icon">📱</div>
         <h3>Scrolluješ bez konca</h3>
-        <p>Otvoríš Instagram "na sekundu" a zrazu je o hodinu neskôr. Každý deň to isté.</p>
+        <p>Otvoríš Instagram „na sekundu" a zrazu je o hodinu neskôr. Každý deň to isté.</p>
       </div>
 
       <div class="card">
@@ -418,21 +577,143 @@
       </div>
 
       <div class="card">
-        <div class="card-icon">😴</div>
-        <h3>Doom scrolling pred spaním</h3>
-        <p>Každý večer si hovoríš "ešte 5 minút" a zaspíš až o 2 hodiny neskôr.</p>
+        <div class="card-icon">🍺</div>
+        <h3>Alkohol viac než chceš</h3>
+        <p>Plánuješ jedno pivo, skončíš pri piatom. A ráno si sľúbiš, že naposledy.</p>
       </div>
 
       <div class="card">
-        <div class="card-icon">🔔</div>
-        <h3>Notifikácie ťa ovládajú</h3>
-        <p>Každé pípnutie ťa vytrhne. Bez telefónu sa cítiš nepokojne.</p>
+        <div class="card-icon">💨</div>
+        <h3>Vaping a nikotín</h3>
+        <p>Vapuješ celý deň. Bez e-cigarety sa cítiš nervózny. 15% mladých na SK vapeuje denne.</p>
       </div>
 
       <div class="card">
         <div class="card-icon">🧠</div>
         <h3>Chceš zmenu</h3>
         <p>Vieš, že problém existuje. Hľadáš spôsob ako začať. Presne preto sme tu.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AKO TO FUNGUJE -->
+  <section class="section" id="ako-to-funguje">
+    <div class="section-label">Ako to funguje</div>
+    <h2>3 kroky k zmene. Začni teraz.</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Sprav si test</h3>
+          <p>15 otázok, 2 minúty. Pokrýva telefón, sociálne siete, gambling, alkohol, gaming aj vaping. Žiadne súdenie — len úprimné otázky.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Dostaneš výsledok na email</h3>
+          <p>Tvoje celkové skóre + breakdown podľa kategórií. Presne uvidíš kde máš najväčší problém a čo s tým robiť.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Začni 30-dňový plán</h3>
+          <p>Personalizované tipy a výzvy na základe tvojho výsledku. Malé kroky, každý deň. Nie revolúcia — evolúcia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÍBEHY -->
+  <section class="section">
+    <div class="section-label">Skutočné príbehy</div>
+    <h2>Nie si v tom sám. Toto zažívajú aj ostatní.</h2>
+
+    <div class="stories">
+      <div class="story">
+        <div class="story-quote" style="padding-left: 1.5rem;">
+          Scrolloval som 5-6 hodín denne. Nevedel som zaspať bez telefónu. Keď som si prvýkrát zmeral screen time, šokoval som sa. Začal som s jednoduchým pravidlom — žiadny telefón v spálni. Prvý týždeň bol peklo. Teraz spím o 2 hodiny viac a ráno sa cítim ako človek.
+        </div>
+        <div class="story-author">
+          <div class="story-avatar">M</div>
+          <div>
+            <div class="story-name">Marek, 23</div>
+            <div class="story-meta">Závislosť na telefóne — 8 mesiacov bez scrollovania pred spaním</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story">
+        <div class="story-quote" style="padding-left: 1.5rem;">
+          Začala som stavkovať cez appku keď som mala 19. Najprv malé sumy, potom väčšie. Za rok som prehrala úspory za auto. Najhoršie bolo, že som o tom nikomu nepovedala. Dnes som 14 mesiacov bez stávky. Nie je to jednoduché, ale dá sa to.
+        </div>
+        <div class="story-author">
+          <div class="story-avatar">K</div>
+          <div>
+            <div class="story-name">Katka, 24</div>
+            <div class="story-meta">Online gambling — 14 mesiacov clean</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story">
+        <div class="story-quote" style="padding-left: 1.5rem;">
+          Gaming mi zožral 3 roky na vysokej. Hrával som do 4 ráno, preskakoval prednášky, stratil som priateľku. Keď som prepadol zo školy, konečne som pochopil. Dnes hrám max hodinu denne a mám pravidlo — nikdy po 22:00.
+        </div>
+        <div class="story-author">
+          <div class="story-avatar">T</div>
+          <div>
+            <div class="story-name">Tomáš, 26</div>
+            <div class="story-meta">Gaming závislosť — kontrolované hranie 10 mesiacov</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story">
+        <div class="story-quote" style="padding-left: 1.5rem;">
+          Vapovala som od 16. Hovorila som si že je to bezpečné. Za 2 roky som nemohla vydržať ani hodinu bez ťahnutia. Nikotínové absťáky boli brutálne. Prestala som zo dňa na deň — prvé 3 dni som skoro nefungovala. Teraz je to 5 mesiacov a konečne dýcham normálne.
+        </div>
+        <div class="story-author">
+          <div class="story-avatar">S</div>
+          <div>
+            <div class="story-name">Simona, 21</div>
+            <div class="story-meta">Vaping / nikotín — 5 mesiacov bez e-cigarety</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEST CTA -->
+  <section class="test-cta">
+    <div class="test-cta-inner">
+      <div class="section-label" style="text-align: center;">Bezplatný test</div>
+      <h2>Zisti za 2 minúty<br>na čom si <span class="highlight">závislý.</span></h2>
+      <p>15 otázok. 6 oblastí. Výsledok aj s odporúčaniami ti pošleme na email. Úplne zadarmo.</p>
+      <a href="test.html" class="btn-test">
+        Spustiť test
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- EMAIL SIGNUP -->
+  <section class="section" style="text-align: center;">
+    <div class="form-container" style="margin: 0 auto;">
+      <div id="formContent">
+        <div class="form-title">Nechceš test? Nechaj aspoň email.</div>
+        <div class="form-desc">Pošleme ti tipy na digital detox, nové články a info keď spustíme ďalšie nástroje.</div>
+        <form id="emailForm" class="input-group" onsubmit="handleSubmit(event)">
+          <input type="email" id="emailInput" placeholder="tvoj@email.sk" required>
+          <button type="submit" id="submitBtn">Chcem prístup</button>
+        </form>
+        <div id="errorMsg" class="error-msg">Niečo sa pokazilo. Skús to znova.</div>
+        <div class="form-note">Žiadny spam. Len užitočné veci. Odhlásiš sa kedykoľvek.</div>
+      </div>
+      <div id="successMsg" class="success-msg">
+        Ďakujeme! Ozveme sa ti hneď ako spustíme.
       </div>
     </div>
   </section>
@@ -444,7 +725,7 @@
       Nástroje, ktoré ti pomôžu pochopiť a zmeniť svoje návyky.
     </p>
     <div class="coming-items">
-      <div class="coming-item"><span>01</span> Test závislosti</div>
+      <div class="coming-item"><span>01</span> Test závislosti ✅</div>
       <div class="coming-item"><span>02</span> 30-dňový detox plán</div>
       <div class="coming-item"><span>03</span> Týždenný newsletter</div>
       <div class="coming-item"><span>04</span> Porovnanie detox appiek</div>
@@ -453,23 +734,18 @@
 
   <!-- FOOTER -->
   <footer>
-    &copy; 2026 somzavisly.sk — Získaj kontrolu späť.
+    <p>&copy; 2026 somzavisly.sk — Získaj kontrolu späť.</p>
+    <p style="margin-top: 0.5rem;">
+      <a href="#">Súkromie</a>
+      <a href="#">Podmienky</a>
+      <a href="mailto:info@somzavisly.sk">Kontakt</a>
+    </p>
+    <p style="margin-top: 0.75rem; font-size: 0.7rem; color: rgba(255,255,255,0.2);">
+      Tento web nie je náhradou za odbornú pomoc. Ak máš vážny problém, kontaktuj Linku dôvery: 0800 500 333
+    </p>
   </footer>
 
   <script>
-    // ==================================================
-    // EMAIL COLLECTION
-    // ==================================================
-    // MOŽNOSŤ 1: Google Sheets (zadarmo)
-    // Vytvor Google Form s jedným poľom "email"
-    // Skopíruj prefilled link a nahraď URL nižšie
-    //
-    // MOŽNOSŤ 2: Formspree.io (50 submits/mesiac zadarmo)
-    // Zaregistruj sa na formspree.io, vytvor form, nahraď URL
-    //
-    // MOŽNOSŤ 3: Mailchimp embedded form
-    // ==================================================
-
     var FORM_URL = 'https://formspree.io/f/mwvwqeky';
 
     function handleSubmit(e) {
@@ -482,44 +758,24 @@
       btn.textContent = 'Odosielam...';
       errorEl.style.display = 'none';
 
-      // Ak nemáš ešte FORM_URL, uloží sa lokálne
-      if (!FORM_URL) {
-        var emails = JSON.parse(localStorage.getItem('somzavisly_emails') || '[]');
-        emails.push({ email: email, date: new Date().toISOString() });
-        localStorage.setItem('somzavisly_emails', JSON.stringify(emails));
-        showSuccess();
-        return;
-      }
-
-      // Odoslanie na Formspree / Google Sheets
       fetch(FORM_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ email: email, source: 'homepage' })
       })
       .then(function(response) {
         if (response.ok) {
-          showSuccess();
-        } else {
-          showError();
-        }
+          document.getElementById('formContent').style.display = 'none';
+          document.getElementById('successMsg').style.display = 'block';
+        } else { showError(); }
       })
-      .catch(function() {
-        showError();
-      });
-    }
+      .catch(function() { showError(); });
 
-    function showSuccess() {
-      document.getElementById('formContent').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
-    }
-
-    function showError() {
-      var btn = document.getElementById('submitBtn');
-      var errorEl = document.getElementById('errorMsg');
-      btn.disabled = false;
-      btn.textContent = 'Chcem prístup';
-      errorEl.style.display = 'block';
+      function showError() {
+        btn.disabled = false;
+        btn.textContent = 'Chcem prístup';
+        errorEl.style.display = 'block';
+      }
     }
   </script>
 
